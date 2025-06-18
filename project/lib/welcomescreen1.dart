@@ -85,7 +85,7 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   // Centered SVG
                   SvgPicture.asset(
-                    'assets/images/group.svg',
+                    'assets/group.svg',
                     height: size.height * 0.50,
                   ),
 

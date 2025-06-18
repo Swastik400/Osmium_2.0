@@ -39,6 +39,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_svg: ^2.2.0
   google_fonts: ^6.2.1
+  country_code_picker: ^3.3.0
 
 dev_dependencies:
   flutter_test:
@@ -65,11 +66,12 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
 
-   - assets/images/group.svg
-   - assets/images/group2.svg 
-   - assets/images/group3.svg
-   
-   - assets/images/group4.svg
+   - assets/group.svg
+   - assets/group2.svg 
+   - assets/group3.svg
+   - assets/group4.svg
+   - assets/google.svg
+   - assets/osmiumlogo.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

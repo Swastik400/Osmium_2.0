@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:project/login1.dart';
 
 void main() {
   runApp(
@@ -101,7 +102,26 @@ class WelcomeScreen4 extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to WelcomeScreen3
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (_, __, ___) => const Login1(),
+                        transitionsBuilder: (_, animation, __, child) {
+                          const begin = Offset(1.0, 0.0); // Slide from right
+                          const end = Offset.zero;
+                          final tween = Tween(
+                            begin: begin,
+                            end: end,
+                          ).chain(CurveTween(curve: Curves.easeInOut));
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,

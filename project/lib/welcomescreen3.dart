@@ -86,7 +86,7 @@ class WelcomeScreen3 extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: SvgPicture.asset(
-                  'assets/images/group3.svg',
+                  'assets/group3.svg',
                   height: size.height * 0.75,
                   width: size.width,
                   fit: BoxFit.cover,
@@ -103,23 +103,25 @@ class WelcomeScreen3 extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-  context,
-  PageRouteBuilder(
-    transitionDuration: const Duration(milliseconds: 500),
-    pageBuilder: (_, __, ___) => const WelcomeScreen4(),
-    transitionsBuilder: (_, animation, __, child) {
-      const begin = Offset(1.0, 0.0); // Slide from right
-      const end = Offset.zero;
-      final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: Curves.easeInOut));
+                      context,
+                      PageRouteBuilder(
+                        transitionDuration: const Duration(milliseconds: 500),
+                        pageBuilder: (_, __, ___) => const WelcomeScreen4(),
+                        transitionsBuilder: (_, animation, __, child) {
+                          const begin = Offset(1.0, 0.0); // Slide from right
+                          const end = Offset.zero;
+                          final tween = Tween(
+                            begin: begin,
+                            end: end,
+                          ).chain(CurveTween(curve: Curves.easeInOut));
 
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  ),
-);
-
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,

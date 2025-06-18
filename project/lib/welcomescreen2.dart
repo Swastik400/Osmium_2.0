@@ -90,7 +90,7 @@ class WelcomeScreen2 extends StatelessWidget {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: SvgPicture.asset(
-                  'assets/images/group2.svg',
+                  'assets/group2.svg',
                   height: size.height * 0.75,
                   width: size.width,
                   fit: BoxFit.cover,
