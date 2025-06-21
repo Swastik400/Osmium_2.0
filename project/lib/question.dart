@@ -18,12 +18,27 @@ class JeeMockTestPage extends StatefulWidget {
 }
 
 class _JeeMockTestPageState extends State<JeeMockTestPage> {
-  int? selectedOption;
-  String? lastButtonPressed;
+  int? selectedOption = 1; // Second option selected by default to match image
+  String? lastButtonPressed = 'Next'; // Next button is active in image
   Duration remainingTime = Duration(hours: 2, minutes: 59, seconds: 2);
   late Timer countdownTimer;
+  bool showSidebar = false;
 
   final List<String> options = ['9', '1/27', '1/9', '27'];
+
+  final Map<int, QuestionStatus> questionStatuses = {
+    1: QuestionStatus.notAnswered,
+    2: QuestionStatus.answered,
+    3: QuestionStatus.answered,
+    4: QuestionStatus.answered,
+    5: QuestionStatus.notVisited,
+    11: QuestionStatus.notAnswered,
+    12: QuestionStatus.notVisited,
+    26: QuestionStatus.notAnswered,
+    27: QuestionStatus.notVisited,
+    29: QuestionStatus.answered,
+    30: QuestionStatus.notVisited,
+  };
 
   @override
   void initState() {
@@ -62,52 +77,226 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F8F4),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-              child: TimerBar(
-                timeString: formatTime(remainingTime),
-                onSubmit: () => setState(() => lastButtonPressed = 'Submit'),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: SubjectTabs(),
-            ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: QuestionCard(
-                  number: 1,
-                  positiveMark: 4.0,
-                  negativeMark: 1.0,
-                  selectedOption: selectedOption,
-                  question:
-                      "A solid sphere of radius R acquires a terminal velocity v1 when falling (due to gravity) through a viscous fluid having a coefficient of viscosity η. The sphere is broken into 27 identical spheres. If each of these acquires a terminal velocity v2, when falling through the same fluid, the ratio (v1/v2) equals",
-                  options: options,
-                  textStyle: GoogleFonts.manrope(
-                    color: Colors.black,
-                    fontSize: 16,
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
+                            child: TimerBar(
+                              timeString: formatTime(remainingTime),
+                              onSubmit: () => setState(() => lastButtonPressed = 'Submit'),
+                              onMenuTap: () => setState(() => showSidebar = true),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: SubjectTabs(),
+                          ),
+                          const SizedBox(height: 8),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: QuestionCard(
+                                number: 1,
+                                positiveMark: 4.0,
+                                negativeMark: 1.0,
+                                selectedOption: selectedOption,
+                                question:
+                                    "A solid sphere of radius R acquires a terminal velocity v1 when falling (due to gravity) through a viscous fluid having a coefficient of viscosity η. The sphere is broken into 27 identical spheres. If each of these acquires a terminal velocity v2, when falling through the same fluid, the ratio (v1/v2) equals",
+                                options: options,
+                                textStyle: GoogleFonts.manrope(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                ),
+                                onOptionTap: (idx) => setState(() => selectedOption = idx),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+                            child: BottomButtons(
+                              lastPressed: lastButtonPressed,
+                              onPressed: (label) => setState(() => lastButtonPressed = label),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  onOptionTap: (idx) => setState(() => selectedOption = idx),
+                );
+              },
+            ),
+          ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            top: 0,
+            bottom: 0,
+            right: showSidebar ? 0 : -MediaQuery.of(context).size.width,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: const BoxDecoration(
+                color: Color(0xFFFDFBF6),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(24),
+                  bottomLeft: Radius.circular(24),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 10,
+                    color: Colors.black26,
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFEBB4),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              alignment: Alignment.center,
+                              child: const Text("Question grid"),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              alignment: Alignment.center,
+                              child: const Text("Question paper"),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close),
+                            onPressed: () => setState(() => showSidebar = false),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _legendItem("Answered", Colors.green),
+                                _legendItem("Not Answered", Colors.red),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _legendItem("Not Visited", Colors.grey),
+                                _legendItem("Review Later", Colors.purple),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          children: [
+                            SubjectSection(
+                              title: "Physics",
+                              color: const Color(0xFFFFB3BA),
+                              questionNumbers: List.generate(25, (i) => i + 1),
+                              questionStatuses: questionStatuses,
+                            ),
+                            const SizedBox(height: 16),
+                            SubjectSection(
+                              title: "Chemistry",
+                              color: const Color(0xFFB5E7A0),
+                              questionNumbers: List.generate(25, (i) => i + 26),
+                              questionStatuses: questionStatuses,
+                            ),
+                            const SizedBox(height: 16),
+                            SubjectSection(
+                              title: "Mathematics",
+                              color: const Color(0xFFA8D8EA),
+                              questionNumbers: List.generate(25, (i) => i + 51),
+                              questionStatuses: questionStatuses,
+                            ),
+                            const SizedBox(height: 20),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              child: BottomButtons(
-                lastPressed: lastButtonPressed,
-                onPressed: (label) => setState(() => lastButtonPressed = label),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+  }
+
+  Widget _legendDot(String text, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
+        ),
+        const SizedBox(width: 4),
+        Text(text, style: const TextStyle(fontSize: 12)),
+      ],
+    );
+  }
+
+  Widget _legendItem(String text, Color color) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: color, width: 2),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: const TextStyle(fontSize: 12),
+        ),
+      ],
     );
   }
 }
@@ -115,8 +304,9 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
 class TimerBar extends StatelessWidget {
   final String timeString;
   final VoidCallback onSubmit;
+  final VoidCallback onMenuTap;
 
-  const TimerBar({super.key, required this.timeString, required this.onSubmit});
+  const TimerBar({super.key, required this.timeString, required this.onSubmit, required this.onMenuTap});
 
   @override
   Widget build(BuildContext context) {
@@ -127,27 +317,57 @@ class TimerBar extends StatelessWidget {
           children: [
             Text(
               timeString,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
-            const SizedBox(height: 4),
-            Text("JEE MAINS Test", style: GoogleFonts.manrope(fontSize: 14)),
+            const SizedBox(height: 2),
+            Text(
+              "JEE MAINS Test",
+              style: GoogleFonts.manrope(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
           ],
         ),
         const Spacer(),
-        OutlinedButton(
-          onPressed: onSubmit,
-          style: OutlinedButton.styleFrom(
-            backgroundColor: const Color(0xFFFFFBF3),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            side: const BorderSide(color: Color(0xFFB1B1B1)),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey[300]!),
           ),
-          child: const Text("Submit", style: TextStyle(color: Colors.black)),
+          child: TextButton(
+            onPressed: onSubmit,
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+               minimumSize: const Size(60, 30),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: Text(
+              "Submit",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
         ),
-        const SizedBox(width: 6),
-        const Icon(Icons.menu, size: 26, color: Color(0xFF494949)),
+        const SizedBox(width: 10),
+        GestureDetector(
+          onTap: onMenuTap,
+          child: Icon(
+            Icons.menu,
+            size: 24,
+            color: Colors.grey[700],
+          ),
+        ),
       ],
     );
   }
@@ -184,11 +404,19 @@ class SubjectTab extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 16,
-            color: isActive ? const Color(0xFF4B4023) : Colors.black54,
+            color: isActive ? Colors.black : Colors.grey[600],
           ),
         ),
+        const SizedBox(height: 8),
         if (isActive)
-          Container(height: 2, width: 60, color: const Color(0xFF4B4023)),
+          Container(
+            height: 3,
+            width: 50,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
       ],
     );
   }
@@ -220,57 +448,61 @@ class QuestionCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-Row(
-  children: [
-    Container(
-      padding: const EdgeInsets.all(2), 
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: const Color.fromARGB(255, 213, 213, 213), 
-          width: 1,
+        Row(
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.grey[300]!),
+                color: Colors.white,
+              ),
+              child: Center(
+                child: Text(
+                  '$number',
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            ScoreBadge(
+              text: '+ ${positiveMark.toStringAsFixed(1)}',
+              bgColor: const Color(0xFFE8F5E8),
+              textColor: const Color(0xFF2E7D32),
+              borderColor: const Color(0xFFA5D6A7),
+            ),
+            const SizedBox(width: 8),
+            ScoreBadge(
+              text: '- ${negativeMark.toStringAsFixed(1)}',
+              bgColor: const Color(0xFFFFF2F2),
+              textColor: const Color(0xFFD32F2F),
+              borderColor: const Color(0xFFFFCDD2),
+            ),
+            const Spacer(),
+            Icon(
+              Icons.bookmark_border_outlined,
+              color: Colors.grey[400],
+              size: 24,
+            ),
+          ],
         ),
-      ),
-      child: CircleAvatar(
-        radius: 14,
-        backgroundColor: const Color.fromARGB(255, 249, 248, 244),
-        child: Text(
-          '$number',
-          style: const TextStyle(color: Colors.black),
-        ),
-      ),
-    ),
-    const SizedBox(width: 10),
-    ScoreBadge(
-      text: '+${positiveMark.toStringAsFixed(1)}',
-      bgColor: const Color(0xFFF2FBEA),
-      textColor: const Color(0xFF195139),
-      bordercolor: const Color(0xFFA2E4B0),
-      borderradius: BorderRadius.circular(10),
-    ),
-    const SizedBox(width: 6),
-    ScoreBadge(
-      text: '-${negativeMark.toStringAsFixed(1)}',
-      bgColor: const Color(0xFFFFF4F4),
-      textColor: const Color(0xFF723B51),
-      bordercolor: const Color(0xFFEF9B9B),
-      borderradius: BorderRadius.circular(10),
-    ),
-    const Spacer(),
-    const Icon(Icons.bookmark_border, color: Colors.grey),
-  ],
-),
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
         Text(
           question,
-          style: textStyle,
-          // maxLines: 4,
-          // overflow: TextOverflow.ellipsis,
+          style: textStyle.copyWith(
+            height: 1.5,
+            fontSize: 16,
+          ),
         ),
-        const SizedBox(height: 30),
+        const SizedBox(height: 24),
         ...options.asMap().entries.map((entry) {
           return Padding(
-            padding: const EdgeInsets.only(bottom: 6),
+            padding: const EdgeInsets.only(bottom: 8),
             child: OptionItem(
               index: entry.key,
               text: entry.value,
@@ -278,7 +510,7 @@ Row(
               onTap: onOptionTap,
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -287,28 +519,33 @@ Row(
 class ScoreBadge extends StatelessWidget {
   final String text;
   final Color bgColor, textColor;
-  final Color? bordercolor;
-  final BorderRadius? borderradius;
+  final Color borderColor;
 
   const ScoreBadge({
     super.key,
     required this.text,
     required this.bgColor,
     required this.textColor,
-    this.bordercolor,
-    this.borderradius,
+    required this.borderColor,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: borderradius ?? BorderRadius.circular(5),
-        border: Border.all(color: bordercolor ?? Colors.transparent),
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: borderColor, width: 0.5),
       ),
-      child: Text(text, style: TextStyle(color: textColor, fontSize: 12)),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
     );
   }
 }
@@ -332,21 +569,23 @@ class OptionItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(index),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFFEFEFEF) : const Color(0xFFF5F5F5),
+          color: isSelected ? const Color(0xFFFFF8E1) : Colors.grey[50],
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isSelected
-                ? const Color.fromARGB(255, 224, 166, 48)
-                : Colors.grey.shade300,
-            width: 2,
+            color: isSelected ? const Color(0xFFFFB74D) : Colors.grey[200]!,
+            width: isSelected ? 2 : 1,
           ),
         ),
         width: double.infinity,
         child: Text(
-          '${index + 1}. $text',
-          style: const TextStyle(fontSize: 16),
+          '${index + 1}.    $text',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
+          ),
         ),
       ),
     );
@@ -367,22 +606,169 @@ class BottomButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [_buildBtn("Previous"), _buildBtn("Next")],
+      children: [
+        _buildBtn("Previous"),
+        _buildBtn("Next"),
+      ],
     );
   }
 
   Widget _buildBtn(String label) {
-    final bool isPressed = label == lastPressed;
-    return OutlinedButton(
-      onPressed: () => onPressed(label),
-      style: OutlinedButton.styleFrom(
-        backgroundColor: isPressed ? Colors.black : Colors.transparent,
-        side: const BorderSide(color: Color(0xFF585858)),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    final bool isActive = lastPressed == label;
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(25),
+        border: Border.all(
+          color: isActive ? Colors.transparent : Colors.grey[400]!,
+        ),
       ),
-      child: Text(
-        label,
-        style: TextStyle(color: isPressed ? Colors.white : Colors.black),
+      child: TextButton(
+        onPressed: () => onPressed(label),
+        style: TextButton.styleFrom(
+          backgroundColor: isActive ? Colors.black : Colors.white,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+          ),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            color: isActive ? Colors.white : Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+}
+enum QuestionStatus {
+  answered,
+  notAnswered,
+  notVisited,
+  reviewLater,
+}
+
+class SubjectSection extends StatelessWidget {
+  final String title;
+  final Color color;
+  final List<int> questionNumbers;
+  final Map<int, QuestionStatus> questionStatuses;
+
+  const SubjectSection({
+    super.key,
+    required this.title,
+    required this.color,
+    required this.questionNumbers,
+    required this.questionStatuses,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+            ),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 5,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 1,
+              ),
+              itemCount: questionNumbers.length,
+              itemBuilder: (context, index) {
+                final questionNumber = questionNumbers[index];
+                final status = questionStatuses[questionNumber] ?? QuestionStatus.notVisited;
+                
+                return QuestionButton(
+                  number: questionNumber,
+                  status: status,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class QuestionButton extends StatelessWidget {
+  final int number;
+  final QuestionStatus status;
+
+  const QuestionButton({
+    super.key,
+    required this.number,
+    required this.status,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Color borderColor;
+    Color backgroundColor = Colors.white;
+
+    switch (status) {
+      case QuestionStatus.answered:
+        borderColor = Colors.green;
+        break;
+      case QuestionStatus.notAnswered:
+        borderColor = Colors.red;
+        break;
+      case QuestionStatus.reviewLater:
+        borderColor = Colors.purple;
+        break;
+      case QuestionStatus.notVisited:
+      default:
+        borderColor = Colors.grey;
+        break;
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        shape: BoxShape.circle,
+        border: Border.all(color: borderColor, width: 2),
+      ),
+      child: Center(
+        child: Text(
+          '$number',
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+        ),
       ),
     );
   }
