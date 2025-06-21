@@ -81,59 +81,52 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
       body: Stack(
         children: [
           SafeArea(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                    child: IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
-                            child: TimerBar(
-                              timeString: formatTime(remainingTime),
-                              onSubmit: () => setState(() => lastButtonPressed = 'Submit'),
-                              onMenuTap: () => setState(() => showSidebar = true),
-                            ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16),
-                            child: SubjectTabs(),
-                          ),
-                          const SizedBox(height: 8),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16),
-                              child: QuestionCard(
-                                number: 1,
-                                positiveMark: 4.0,
-                                negativeMark: 1.0,
-                                selectedOption: selectedOption,
-                                question:
-                                    "A solid sphere of radius R acquires a terminal velocity v1 when falling (due to gravity) through a viscous fluid having a coefficient of viscosity η. The sphere is broken into 27 identical spheres. If each of these acquires a terminal velocity v2, when falling through the same fluid, the ratio (v1/v2) equals",
-                                options: options,
-                                textStyle: GoogleFonts.manrope(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                ),
-                                onOptionTap: (idx) => setState(() => selectedOption = idx),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
-                            child: BottomButtons(
-                              lastPressed: lastButtonPressed,
-                              onPressed: (label) => setState(() => lastButtonPressed = label),
-                            ),
-                          ),
-                        ],
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
+                  child: TimerBar(
+                    timeString: formatTime(remainingTime),
+                    onSubmit: () => setState(() => lastButtonPressed = 'Submit'),
+                    onMenuTap: () => setState(() => showSidebar = true),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: SubjectTabs(),
+                ),
+                Container(
+                  height: 1,
+                  color: Colors.grey.shade200,
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                ),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: QuestionCard(
+                      number: 1,
+                      positiveMark: 4.0,
+                      negativeMark: 1.0,
+                      selectedOption: selectedOption,
+                      question:
+                          "A solid sphere of radius R acquires a terminal velocity v1 when falling (due to gravity) through a viscous fluid having a coefficient of viscosity η. The sphere is broken into 27 identical spheres. If each of these acquires a terminal velocity v2, when falling through the same fluid, the ratio (v1/v2) equals",
+                      options: options,
+                      textStyle: GoogleFonts.manrope(
+                        color: Colors.black,
+                        fontSize: 20,
                       ),
+                      onOptionTap: (idx) => setState(() => selectedOption = idx),
                     ),
                   ),
-                );
-              },
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+                  child: BottomButtons(
+                    lastPressed: lastButtonPressed,
+                    onPressed: (label) => setState(() => lastButtonPressed = label),
+                  ),
+                ),
+              ],
             ),
           ),
           AnimatedPositioned(
@@ -335,18 +328,16 @@ class TimerBar extends StatelessWidget {
         ),
         const Spacer(),
         Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey[300]!),
-          ),
+          
           child: TextButton(
             onPressed: onSubmit,
             style: TextButton.styleFrom(
               backgroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-               minimumSize: const Size(60, 30),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
+              minimumSize: const Size(70, 30), // button ka  height
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
+              side: BorderSide(color: Colors.grey[300]!, width: 1.5),
               ),
             ),
             child: Text(
@@ -532,17 +523,17 @@ class ScoreBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(4),
         border: Border.all(color: borderColor, width: 0.5),
       ),
       child: Text(
         text,
         style: TextStyle(
           color: textColor,
-          fontSize: 12,
+          fontSize: 10,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -569,10 +560,10 @@ class OptionItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(index),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFFFFF8E1) : Colors.grey[50],
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: isSelected ? const Color(0xFFFFB74D) : Colors.grey[200]!,
             width: isSelected ? 2 : 1,
@@ -582,7 +573,7 @@ class OptionItem extends StatelessWidget {
         child: Text(
           '${index + 1}.    $text',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: Colors.black,
             fontWeight: isSelected ? FontWeight.w500 : FontWeight.normal,
           ),
@@ -616,29 +607,25 @@ class BottomButtons extends StatelessWidget {
   Widget _buildBtn(String label) {
     final bool isActive = lastPressed == label;
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
-        border: Border.all(
-          color: isActive ? Colors.transparent : Colors.grey[400]!,
+    return TextButton(
+      onPressed: () => onPressed(label),
+      style: TextButton.styleFrom(
+        backgroundColor: isActive ? Colors.black : Colors.white,
+        padding:  EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: isActive ? Colors.black : Colors.grey[400]!,
+          ),
         ),
+        minimumSize: const Size(80, 32),
       ),
-      child: TextButton(
-        onPressed: () => onPressed(label),
-        style: TextButton.styleFrom(
-          backgroundColor: isActive ? Colors.black : Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(25),
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: isActive ? Colors.white : Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: isActive ? Colors.white : Colors.black,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
         ),
       ),
     );
@@ -670,19 +657,19 @@ class SubjectSection extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: Column(
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             decoration: BoxDecoration(
               color: color,
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
               ),
             ),
             child: Text(
@@ -690,12 +677,12 @@ class SubjectSection extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 16,
+                fontSize: 14,
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -764,7 +751,7 @@ class QuestionButton extends StatelessWidget {
         child: Text(
           '$number',
           style: const TextStyle(
-            fontSize: 14,
+            fontSize: 12,
             fontWeight: FontWeight.w500,
             color: Colors.black,
           ),
