@@ -87,7 +87,8 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
                   padding: EdgeInsets.fromLTRB(16, 12, 16, 8),
                   child: TimerBar(
                     timeString: formatTime(remainingTime),
-                    onSubmit: () => setState(() => lastButtonPressed = 'Submit'),
+                    onSubmit: () =>
+                        setState(() => lastButtonPressed = 'Submit'),
                     onMenuTap: () => setState(() => showSidebar = true),
                   ),
                 ),
@@ -98,7 +99,10 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
                 Container(
                   height: 1,
                   color: Colors.grey.shade200,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 8,
+                  ),
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -115,7 +119,8 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
                         color: Colors.black,
                         fontSize: 20,
                       ),
-                      onOptionTap: (idx) => setState(() => selectedOption = idx),
+                      onOptionTap: (idx) =>
+                          setState(() => selectedOption = idx),
                     ),
                   ),
                 ),
@@ -123,7 +128,8 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
                   padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
                   child: BottomButtons(
                     lastPressed: lastButtonPressed,
-                    onPressed: (label) => setState(() => lastButtonPressed = label),
+                    onPressed: (label) =>
+                        setState(() => lastButtonPressed = label),
                   ),
                 ),
               ],
@@ -143,12 +149,7 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
                   topLeft: Radius.circular(24),
                   bottomLeft: Radius.circular(24),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 10,
-                    color: Colors.black26,
-                  ),
-                ],
+                boxShadow: [BoxShadow(blurRadius: 10, color: Colors.black26)],
               ),
               child: SafeArea(
                 child: Column(
@@ -178,7 +179,8 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
                           ),
                           IconButton(
                             icon: const Icon(Icons.close),
-                            onPressed: () => setState(() => showSidebar = false),
+                            onPressed: () =>
+                                setState(() => showSidebar = false),
                           ),
                         ],
                       ),
@@ -254,23 +256,6 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
     );
   }
 
-  Widget _legendDot(String text, Color color) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 12,
-          height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 4),
-        Text(text, style: const TextStyle(fontSize: 12)),
-      ],
-    );
-  }
 
   Widget _legendItem(String text, Color color) {
     return Row(
@@ -285,10 +270,7 @@ class _JeeMockTestPageState extends State<JeeMockTestPage> {
           ),
         ),
         const SizedBox(width: 8),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 12),
-        ),
+        Text(text, style: const TextStyle(fontSize: 12)),
       ],
     );
   }
@@ -299,7 +281,12 @@ class TimerBar extends StatelessWidget {
   final VoidCallback onSubmit;
   final VoidCallback onMenuTap;
 
-  const TimerBar({super.key, required this.timeString, required this.onSubmit, required this.onMenuTap});
+  const TimerBar({
+    super.key,
+    required this.timeString,
+    required this.onSubmit,
+    required this.onMenuTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -319,45 +306,35 @@ class TimerBar extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               "JEE MAINS Test",
-              style: GoogleFonts.manrope(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: GoogleFonts.manrope(fontSize: 14, color: Colors.grey[600]),
             ),
           ],
         ),
         const Spacer(),
-        Container(
-          
-          child: TextButton(
-            onPressed: onSubmit,
-            style: TextButton.styleFrom(
-              backgroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8), 
-              minimumSize: const Size(70, 30), // button ka  height
-              shape: RoundedRectangleBorder(
+        TextButton(
+          onPressed: onSubmit,
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            minimumSize: const Size(70, 30), // button ka  height
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
               side: BorderSide(color: Colors.grey[300]!, width: 1.5),
-              ),
             ),
-            child: Text(
-              "Submit",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+          ),
+          child: Text(
+            "Submit",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
         const SizedBox(width: 10),
         GestureDetector(
           onTap: onMenuTap,
-          child: Icon(
-            Icons.menu,
-            size: 24,
-            color: Colors.grey[700],
-          ),
+          child: Icon(Icons.menu, size: 24, color: Colors.grey[700]),
         ),
       ],
     );
@@ -483,13 +460,7 @@ class QuestionCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20),
-        Text(
-          question,
-          style: textStyle.copyWith(
-            height: 1.5,
-            fontSize: 16,
-          ),
-        ),
+        Text(question, style: textStyle.copyWith(height: 1.5, fontSize: 16)),
         const SizedBox(height: 24),
         ...options.asMap().entries.map((entry) {
           return Padding(
@@ -597,10 +568,7 @@ class BottomButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        _buildBtn("Previous"),
-        _buildBtn("Next"),
-      ],
+      children: [_buildBtn("Previous"), _buildBtn("Next")],
     );
   }
 
@@ -611,12 +579,10 @@ class BottomButtons extends StatelessWidget {
       onPressed: () => onPressed(label),
       style: TextButton.styleFrom(
         backgroundColor: isActive ? Colors.black : Colors.white,
-        padding:  EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(
-            color: isActive ? Colors.black : Colors.grey[400]!,
-          ),
+          side: BorderSide(color: isActive ? Colors.black : Colors.grey[400]!),
         ),
         minimumSize: const Size(80, 32),
       ),
@@ -631,12 +597,8 @@ class BottomButtons extends StatelessWidget {
     );
   }
 }
-enum QuestionStatus {
-  answered,
-  notAnswered,
-  notVisited,
-  reviewLater,
-}
+
+enum QuestionStatus { answered, notAnswered, notVisited, reviewLater }
 
 class SubjectSection extends StatelessWidget {
   final String title;
@@ -675,10 +637,7 @@ class SubjectSection extends StatelessWidget {
             child: Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
             ),
           ),
           Padding(
@@ -695,12 +654,11 @@ class SubjectSection extends StatelessWidget {
               itemCount: questionNumbers.length,
               itemBuilder: (context, index) {
                 final questionNumber = questionNumbers[index];
-                final status = questionStatuses[questionNumber] ?? QuestionStatus.notVisited;
-                
-                return QuestionButton(
-                  number: questionNumber,
-                  status: status,
-                );
+                final status =
+                    questionStatuses[questionNumber] ??
+                    QuestionStatus.notVisited;
+
+                return QuestionButton(number: questionNumber, status: status);
               },
             ),
           ),
@@ -714,11 +672,7 @@ class QuestionButton extends StatelessWidget {
   final int number;
   final QuestionStatus status;
 
-  const QuestionButton({
-    super.key,
-    required this.number,
-    required this.status,
-  });
+  const QuestionButton({super.key, required this.number, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -736,8 +690,7 @@ class QuestionButton extends StatelessWidget {
         borderColor = Colors.purple;
         break;
       case QuestionStatus.notVisited:
-      default:
-        borderColor = Colors.grey;
+      borderColor = Colors.grey;
         break;
     }
 
