@@ -40,6 +40,7 @@ dependencies:
   flutter_svg: ^2.2.0
   google_fonts: ^6.2.1
   country_code_picker: ^3.3.0
+  file_picker: ^10.2.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,13 @@ flutter:
    - assets/group4.svg
    - assets/google.svg
    - assets/osmiumlogo.svg
+   - assets/vector1.svg
+   - assets/vector2.svg
+   - assets/vector3.svg
+   - assets/vector4.svg
+   - assets/vector5.svg
+   - assets/bell.svg
+   - assets/file.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
